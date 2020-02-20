@@ -1,0 +1,27 @@
+---
+- hosts: appservers
+  vars:
+    userfile: /opt/newusers.list
+  tasks:
+    - name: Create file
+      file:
+        state: touch
+        path: "{{ userfile}}"
+    - name: create users
+      user:
+        name: "{{item}}"
+        password: abc123def
+      with_items: 
+           -  "{{ developers}}"
+           -  "{{ admins}}"
+           -  "{{ testers}}"
+
+
+    - name: List Users
+      lineinfile:
+         path: "{{ userfile}}"
+         line:  "{{ item}}"
+      with_items:
+        -  "{{ developers}}"
+        -  "{{ admins}}"
+        -  "{{ testers}}"

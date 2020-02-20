@@ -1,0 +1,27 @@
+
+---
+- hosts: all
+  become: yes
+  handlers:
+    - name: restart apache
+      service: name="httpd" state="restarted"
+      listen: "restart web"
+  tasks:
+    - name: install apache
+      yum: 
+        name: httpd
+        state: latest
+    - name: Create new document root directory
+      file:
+        path: /opt/www
+        state: directory
+
+        
+    - name: change config
+      replace:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '^DocumentRoot.*$'
+        replace: 'DocumentRoot "/var/www/html"'
+        backup: yes
+      notify: "restart web"
+

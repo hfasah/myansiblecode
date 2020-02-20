@@ -1,0 +1,13 @@
+---
+- hosts: all
+  tasks:
+    - name: Get File
+      block:
+        - get_url:
+            url: "http://Lab1/index.html"
+            dest: "/tmp/index_file"
+      rescue:
+        - debug: msg="The file does not exist"
+      always:
+        - debug: msg="Play done!"
+
